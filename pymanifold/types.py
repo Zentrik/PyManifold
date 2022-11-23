@@ -36,10 +36,13 @@ class DictDeserializable:
 class Bet(DictDeserializable):
     """Represents a bet."""
 
-    amount: int
+    amount: float
+    shares: float
+    outcome: str
     contractId: str
     createdTime: int
     id: str
+    limitProb: float | None = None
 
     loanAmount: int | None = None
     userId: str | None = None
@@ -50,6 +53,7 @@ class Bet(DictDeserializable):
     orderAmount: int | None = None
     isCancelled: bool = False
     isFilled: bool = True
+    isRedemption: bool = False
     fills: list[dict[str, float | str | None]] | None = None
     fees: dict[str, float] | None = None
 

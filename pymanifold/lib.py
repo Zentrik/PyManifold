@@ -83,7 +83,7 @@ class ManifoldClient:
 
     def get_market_by_id(self, market_id: str) -> Market:
         """Get a market by id."""
-        return Market.from_dict(self._get_market_by_id_raw(market_id))
+        return LiteMarket.from_dict(self._get_market_by_id_raw(market_id))
 
     def _get_market_by_id_raw(self, market_id: str) -> JSONDict:
         """Get a market by id."""
@@ -92,7 +92,7 @@ class ManifoldClient:
 
     def get_market_by_slug(self, slug: str) -> Market:
         """Get a market by slug."""
-        return Market.from_dict(self._get_market_by_slug_raw(slug))
+        return LiteMarket.from_dict(self._get_market_by_slug_raw(slug))
 
     def _get_market_by_slug_raw(self, slug: str) -> JSONDict:
         """Get a market by slug."""
@@ -101,7 +101,7 @@ class ManifoldClient:
 
     def get_market_by_url(self, url: str) -> Market:
         """Get a market by url."""
-        return Market.from_dict(self._get_market_by_url_raw(url))
+        return LiteMarket.from_dict(self._get_market_by_url_raw(url))
 
     def _get_market_by_url_raw(self, url: str) -> JSONDict:
         """Get a market by url."""
@@ -122,6 +122,18 @@ class ManifoldClient:
             return {"Authorization": "Key " + self.api_key}
         else:
             raise RuntimeError("No API key provided")
+
+
+    def cancel_bet(self, contractId) -> requests.Response:
+        response = requests.post(
+            url=BASE_URI + "/bet/cancel/" + contractId,
+            json={
+                "betId": contractId
+            },
+            headers=self._auth_headers(),
+        )
+        response.raise_for_status()
+        return response
 
     def cancel_market(self, market: Union[LiteMarket, str]) -> requests.Response:
         """Cancel a market, resolving it N/A."""
