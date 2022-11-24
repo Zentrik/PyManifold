@@ -97,7 +97,7 @@ class LiteMarket(DictDeserializable):
 
     outcomeType: Literal["BINARY", "FREE_RESPONSE", "NUMERIC", "PSEUDO_NUMERIC", "MULTIPLE_CHOICE"]
     pool: float | Mapping[str, float] | None
-    volume7Days: float
+    # volume7Days: float
     volume24Hours: float
     isResolved: bool
     description: str = ""
@@ -106,6 +106,8 @@ class LiteMarket(DictDeserializable):
     resolutionTime: Optional[int] = None
     resolution: Optional[str] = None
     resolutionProbability: Optional[float] = None
+
+    answers: list[dict[str, float | str | None]] | None = None
 
     p: Optional[float] = None
     totalLiquidity: Optional[float] = None
