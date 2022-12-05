@@ -68,6 +68,18 @@ class ManifoldClient:
         """List all bets."""
         return list(self.get_bets(limit, before, username, market))
 
+    def _get_bets_raw(
+        self,
+        limit: Optional[int] = None,
+        before: Optional[str] = None,
+        username: Optional[str] = None,
+        market: Optional[str] = None,
+    ) -> JSONDict:
+        response = requests.get(
+            url=BASE_URI + "/bets", params={"limit": limit, "before": before, "username": username, "market": market}
+        )
+        return cast(JSONDict, response.json())
+
     def get_bets(
         self,
         limit: Optional[int] = None,
@@ -76,10 +88,8 @@ class ManifoldClient:
         market: Optional[str] = None,
     ) -> Iterable[Bet]:
         """Iterate over all bets."""
-        response = requests.get(
-            url=BASE_URI + "/bets", params={"limit": limit, "before": before, "username": username, "market": market}
-        )
-        return (Bet.from_dict(market) for market in response.json())
+    
+        return (Bet.from_dict(market) for market in self._get_bets_raw(limit, before, username, market))
 
     def get_market_by_id(self, market_id: str) -> Market:
         """Get a market by id."""
